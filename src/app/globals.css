@@ -70,6 +70,8 @@
 
 /* Short viewports (landscape laptops, small phones): tighter vertical rhythm. */
 @custom-variant short (@media (max-height: 820px));
+/* Devices with a real hover-capable pointer (mouse/trackpad). */
+@custom-variant hoverable (@media (hover: hover) and (pointer: fine));
 
 /* ------------------------------------------------------------------
    Base
@@ -391,5 +393,19 @@
       transform: scale(1.08);
       box-shadow: var(--shadow-glow);
     }
+  }
+}
+
+/* ------------------------------------------------------------------
+   Project tile 3D tilt (vars set from the pointer in ProjectTile)
+   ------------------------------------------------------------------ */
+@layer components {
+  .project-tilt {
+    transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: auto;
+  }
+  .project-tilt:hover {
+    transition-duration: 0.15s;
   }
 }

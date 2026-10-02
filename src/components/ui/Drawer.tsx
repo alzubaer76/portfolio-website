@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimatePresence, motion, useDragControls } from "motion/react";
+import { AnimatePresence, m, useDragControls } from "motion/react";
 import { useRef, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { useFocusTrap } from "@/hooks/useFocusTrap";
@@ -41,7 +41,7 @@ export function Drawer({ open, onClose, labelledBy, children }: DrawerProps) {
     <AnimatePresence>
       {open && (
         <div className="fixed inset-0 z-[70]">
-          <motion.div
+          <m.div
             aria-hidden="true"
             className="absolute inset-0 bg-bg/70 backdrop-blur-sm"
             onClick={onClose}
@@ -50,7 +50,7 @@ export function Drawer({ open, onClose, labelledBy, children }: DrawerProps) {
             exit={{ opacity: 0 }}
             transition={{ duration: reduced ? 0 : 0.25 }}
           />
-          <motion.div
+          <m.div
             ref={ref}
             role="dialog"
             aria-modal="true"
@@ -86,7 +86,7 @@ export function Drawer({ open, onClose, labelledBy, children }: DrawerProps) {
             <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain" data-lenis-prevent>
               {children}
             </div>
-          </motion.div>
+          </m.div>
         </div>
       )}
     </AnimatePresence>,

@@ -1,7 +1,7 @@
 "use client";
 
 import { X } from "lucide-react";
-import { AnimatePresence, motion, useReducedMotion as useMotionReduced } from "motion/react";
+import { AnimatePresence, m, useReducedMotion as useMotionReduced } from "motion/react";
 import { useEffect, useRef } from "react";
 import { site } from "@/content/site";
 import { useFocusTrap } from "@/hooks/useFocusTrap";
@@ -34,7 +34,7 @@ export function MobileMenu({ open, active, onClose, onNavigate }: MobileMenuProp
   return (
     <AnimatePresence>
       {open && (
-        <motion.div
+        <m.div
           ref={ref}
           id="mobile-menu"
           role="dialog"
@@ -64,7 +64,7 @@ export function MobileMenu({ open, active, onClose, onNavigate }: MobileMenuProp
               {site.nav.map((link, i) => {
                 const isActive = active === link.href.slice(1);
                 return (
-                  <motion.li
+                  <m.li
                     key={link.href}
                     initial={reduced ? false : { opacity: 0, y: 24 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -85,13 +85,13 @@ export function MobileMenu({ open, active, onClose, onNavigate }: MobileMenuProp
                       {link.label}
                       {isActive && <span aria-hidden="true" className="bg-brand-gradient size-2 rounded-full" />}
                     </a>
-                  </motion.li>
+                  </m.li>
                 );
               })}
             </ul>
           </nav>
 
-          <motion.div
+          <m.div
             className="flex shrink-0 flex-col gap-4 px-5 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-6 md:px-8"
             initial={reduced ? false : { opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
@@ -101,8 +101,8 @@ export function MobileMenu({ open, active, onClose, onNavigate }: MobileMenuProp
             <Button href={site.navCta.href} className="w-full" onClick={onClose}>
               {site.navCta.label}
             </Button>
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
       )}
     </AnimatePresence>
   );

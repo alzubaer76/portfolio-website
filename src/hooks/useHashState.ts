@@ -23,16 +23,20 @@ const getHash = () => window.location.hash;
  * `open` pushes a history entry so the browser back button closes the
  * overlay; `close` pops that entry when we created it, else replaces it.
  */
-export function useHashRoute(prefix: string): [slug: string | null, open: (slug: string) => void, close: () => void] {
+type OpenFn = (slug: string, options?: { replace?: boolean }) => void;
+
+export function useHashRoute(prefix: string): [slug: string | null, open: OpenFn, close: () => void] {
   const hash = useSyncExternalStore(subscribe, getHash, () => "");
   const match = hash.match(new RegExp(`^#${prefix}/([\\w-]+)$`));
   const slug = match ? match[1] : null;
 
-  const open = useCallback(
-    (next: string) => {
+  const open = useCallback<OpenFn>(
+    (next, { replace = false } = {}) => {
       const target = `#${prefix}/${next}`;
       if (window.location.hash === target) return;
-      history.pushState({ hashRoute: prefix }, "", target);
+      // `replace` swaps the open item (e.g. "next project") without adding a back-step.
+      const state = replace ? history.state : { hashRoute: prefix };
+      history[replace ? "replaceState" : "pushState"](state, "", target);
       window.dispatchEvent(new Event(LOCAL_EVENT));
     },
     [prefix],

@@ -17,6 +17,8 @@ interface SectionProps {
   align?: "left" | "center";
   /** Render children outside the Container (full-bleed). */
   bleed?: boolean;
+  /** id of a heading rendered by the children (when not using `heading`). */
+  labelledBy?: string;
 }
 
 export function Section({
@@ -31,6 +33,7 @@ export function Section({
   headerClassName,
   align = "left",
   bleed = false,
+  labelledBy,
 }: SectionProps) {
   const headingId = `${id}-heading`;
   const header = heading ? (
@@ -55,8 +58,8 @@ export function Section({
   return (
     <section
       id={id}
-      aria-labelledby={heading ? headingId : undefined}
-      aria-label={heading ? undefined : label}
+      aria-labelledby={heading ? headingId : labelledBy}
+      aria-label={heading || labelledBy ? undefined : label}
       data-section={label ?? id}
       className={cn("section-y relative overflow-x-clip", className)}
     >

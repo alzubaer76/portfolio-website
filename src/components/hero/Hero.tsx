@@ -86,14 +86,17 @@ export function Hero() {
       const q = gsap.utils.selector(sectionRef);
       const words = q("[data-word]");
       const rest = q("[data-enter]");
+      // The subheadline is often the LCP element: it only slides, never hides.
+      const lcpSafe = q("[data-enter='slide']");
       gsap.set(words, { yPercent: 110 });
-      gsap.set(rest, { autoAlpha: 0, y: 24 });
+      gsap.set(rest.filter((el) => !lcpSafe.includes(el)), { autoAlpha: 0, y: 24 });
+      gsap.set(lcpSafe, { y: 16 });
       let tl: gsap.core.Timeline | undefined;
       const stop = onIntroDone(() => {
         tl = gsap
           .timeline({ onComplete: () => setIntroPlayed(true) })
           .to(words, { yPercent: 0, duration: 0.9, ease: "expo.out", stagger: 0.04 })
-          .to(rest, { autoAlpha: 1, y: 0, duration: 0.8, ease: "expo.out", stagger: 0.08, clearProps: "transform" }, 0.25);
+          .to(rest, { autoAlpha: 1, y: 0, duration: 0.8, ease: "expo.out", stagger: 0.08, clearProps: "transform,opacity,visibility" }, 0.25);
       });
       return () => {
         stop();
@@ -217,7 +220,7 @@ export function Hero() {
           </div>
 
           <div data-scroll="support">
-            <p data-enter className="mt-6 max-w-xl text-lg text-text-muted short:mt-4 md:text-xl">
+            <p data-enter="slide" className="mt-6 max-w-xl text-lg text-text-muted short:mt-4 md:text-xl">
               {hero.subheadline}
             </p>
           </div>

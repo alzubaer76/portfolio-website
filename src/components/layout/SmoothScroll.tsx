@@ -1,6 +1,9 @@
 "use client";
 
 import Lenis from "lenis";
+import { LazyMotion, MotionConfig } from "motion/react";
+
+const loadMotionFeatures = () => import("@/lib/motion-features").then((mod) => mod.default);
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
@@ -76,20 +79,27 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     };
   }, [reduced]);
 
-  // Recalculate trigger positions once fonts and images have settled.
+  // Recalculate trigger positions once web fonts have swapped in (text reflow).
+  // ScrollTrigger already refreshes on window load and resize by itself.
   useEffect(() => {
     let cancelled = false;
-    const refresh = () => {
+    document.fonts?.ready.then(() => {
       if (!cancelled) ScrollTrigger.refresh();
-    };
-    document.fonts?.ready.then(refresh);
-    if (document.readyState === "complete") refresh();
-    else window.addEventListener("load", refresh, { once: true });
+    });
     return () => {
       cancelled = true;
-      window.removeEventListener("load", refresh);
     };
   }, []);
 
-  return <LenisContext.Provider value={lenis}>{children}</LenisContext.Provider>;
+  return (
+    <LenisContext.Provider value={lenis}>
+      {/* Motion honours prefers-reduced-motion everywhere (no transform/layout animation). */}
+      <MotionConfig reducedMotion="user">
+        {/* `m` components + async features: the animation engine loads after first paint. */}
+        <LazyMotion features={loadMotionFeatures} strict>
+          {children}
+        </LazyMotion>
+      </MotionConfig>
+    </LenisContext.Provider>
+  );
 }

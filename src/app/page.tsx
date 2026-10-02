@@ -4,6 +4,8 @@ import { Footer } from "@/components/layout/Footer";
 import { Hero } from "@/components/hero/Hero";
 import { TrustMarquee } from "@/components/trust/TrustMarquee";
 import { Services } from "@/components/services/Services";
+import { About } from "@/components/about/About";
+import { WorkSection } from "@/components/work/WorkSection";
 import { Section } from "@/components/ui/Section";
 
 export default function Home() {
@@ -14,8 +16,8 @@ export default function Home() {
         <Hero />
         <TrustMarquee />
         <Services />
-        <Section id="about" label="About" eyebrow={site.about.eyebrow} heading={site.about.heading} />
-        <Section id="work" label="Work" {...site.workCopy} />
+        <About />
+        <WorkSection />
         <Section id="results" label="Results" {...site.resultsCopy} />
         <Section id="calculator" label="ROI Calculator" eyebrow={site.calculator.eyebrow} heading={site.calculator.heading} subheading={site.calculator.subheading} />
         <Section id="process" label="Process" {...site.processCopy} />

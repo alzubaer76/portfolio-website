@@ -59,7 +59,7 @@ export function ringsSvg(size = 512, { bg = null, glow = true } = {}) {
 </svg>`;
 }
 
-function card(w, h, title, sub = "", { hue = 0 } = {}) {
+function card(w, h, title, sub = "", { hue = 0, labelTop = false } = {}) {
   const a = COLORS[hue % COLORS.length];
   const b = COLORS[(hue + 4) % COLORS.length];
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
@@ -70,8 +70,8 @@ function card(w, h, title, sub = "", { hue = 0 } = {}) {
   <rect width="100%" height="100%" fill="url(#bg)"/>
   <rect width="100%" height="100%" fill="url(#glow)"/>
   <g stroke="#2A1A40" stroke-width="1">${Array.from({ length: 12 }, (_, i) => `<line x1="${(i * w) / 12}" y1="0" x2="${(i * w) / 12}" y2="${h}"/>`).join("")}</g>
-  <text x="50%" y="${h / 2}" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="${Math.round(Math.min(w, h) / 11)}" fill="#F5F0FA">${title}</text>
-  ${sub ? `<text x="50%" y="${h / 2 + Math.min(w, h) / 9}" text-anchor="middle" font-family="Arial, sans-serif" font-size="${Math.round(Math.min(w, h) / 22)}" fill="#B7A9C9">${sub}</text>` : ""}
+  <text x="50%" y="${labelTop ? h * 0.16 : h / 2}" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="${Math.round(Math.min(w, h) / 11)}" fill="#F5F0FA">${title}</text>
+  ${sub ? `<text x="50%" y="${(labelTop ? h * 0.16 : h / 2) + Math.min(w, h) / 9}" text-anchor="middle" font-family="Arial, sans-serif" font-size="${Math.round(Math.min(w, h) / 22)}" fill="#B7A9C9">${sub}</text>` : ""}
 </svg>`;
 }
 
@@ -102,7 +102,7 @@ await out("about.jpg", await jpg(card(800, 1000, "Portrait placeholder", "Replac
 // Projects
 const projects = ["project-one", "project-two", "project-three", "project-four", "project-five", "project-six"];
 for (const [i, slug] of projects.entries()) {
-  await out(`projects/${slug}/cover.jpg`, await jpg(card(1200, 900, `Project ${i + 1} cover`, "Placeholder image", { hue: i })));
+  await out(`projects/${slug}/cover.jpg`, await jpg(card(1200, 900, `Project ${i + 1} cover`, "Placeholder image", { hue: i, labelTop: true })));
   for (let g = 1; g <= 3; g++) {
     await out(`projects/${slug}/gallery-${g}.jpg`, await jpg(card(g === 2 ? 900 : 1200, g === 2 ? 1200 : 800, `Gallery ${g}`, `Project ${i + 1} · placeholder`, { hue: i + g })));
   }

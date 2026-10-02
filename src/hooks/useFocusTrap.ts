@@ -5,6 +5,9 @@ import { useEffect, type RefObject } from "react";
 const FOCUSABLE =
   'a[href], area[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), iframe, [tabindex]:not([tabindex="-1"]), [contenteditable="true"]';
 
+/** Active traps, innermost last: only the topmost one handles Tab/Escape (nested dialogs). */
+const stack: object[] = [];
+
 /**
  * Trap Tab focus inside `ref` while `active`, close on Escape, and restore
  * focus to the previously focused element when deactivated.
@@ -12,13 +15,19 @@ const FOCUSABLE =
 export function useFocusTrap(
   ref: RefObject<HTMLElement | null>,
   active: boolean,
-  { onEscape, initialFocus }: { onEscape?: () => void; initialFocus?: RefObject<HTMLElement | null> } = {},
+  {
+    onEscape,
+    initialFocus,
+    restoreFocus = true,
+  }: { onEscape?: () => void; initialFocus?: RefObject<HTMLElement | null>; restoreFocus?: boolean } = {},
 ) {
   useEffect(() => {
     if (!active) return;
     const container = ref.current;
     if (!container) return;
     const previouslyFocused = document.activeElement as HTMLElement | null;
+    const token = {};
+    stack.push(token);
 
     const getFocusable = () =>
       Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE)).filter(
@@ -33,6 +42,7 @@ export function useFocusTrap(
     const raf = requestAnimationFrame(focusFirst);
 
     const onKeyDown = (e: KeyboardEvent) => {
+      if (stack[stack.length - 1] !== token) return;
       if (e.key === "Escape" && onEscape) {
         e.stopPropagation();
         onEscape();
@@ -61,9 +71,10 @@ export function useFocusTrap(
     return () => {
       cancelAnimationFrame(raf);
       document.removeEventListener("keydown", onKeyDown, true);
-      if (previouslyFocused && document.contains(previouslyFocused)) {
+      stack.splice(stack.indexOf(token), 1);
+      if (restoreFocus && previouslyFocused && document.contains(previouslyFocused)) {
         previouslyFocused.focus({ preventScroll: true });
       }
     };
-  }, [active, ref, onEscape, initialFocus]);
+  }, [active, ref, onEscape, initialFocus, restoreFocus]);
 }
