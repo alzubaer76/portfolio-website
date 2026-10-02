@@ -83,7 +83,6 @@ await out("logo.svg", ringsSvg(512, { glow: false }));
 await out("logo.png", await png(ringsSvg(512, { glow: false })));
 await out(path.join(root, "src/app/icon.png"), await png(ringsSvg(512, { bg: "#0A0612", glow: false })));
 await out(path.join(root, "src/app/apple-icon.png"), await sharp(Buffer.from(ringsSvg(180, { bg: "#0A0612", glow: false }))).png().toBuffer());
-await out("hero-rings.svg", ringsSvg(800));
 
 // OG image
 await out(

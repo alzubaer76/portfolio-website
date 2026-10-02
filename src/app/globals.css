@@ -30,6 +30,21 @@
   --container-site: 1240px;
 
   --animate-pulse-dot: pulse-dot 2s ease-in-out infinite;
+  --animate-scroll-dot: scroll-dot 1.6s ease-in-out infinite;
+
+  @keyframes scroll-dot {
+    0% {
+      transform: translateY(0);
+      opacity: 0;
+    }
+    25% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(10px);
+      opacity: 0;
+    }
+  }
 
   @keyframes pulse-dot {
     0%,
@@ -52,6 +67,9 @@
   --nav-h: 72px;
   color-scheme: dark;
 }
+
+/* Short viewports (landscape laptops, small phones): tighter vertical rhythm. */
+@custom-variant short (@media (max-height: 820px));
 
 /* ------------------------------------------------------------------
    Base
