@@ -2,6 +2,8 @@ import { site } from "@/content/site";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Hero } from "@/components/hero/Hero";
+import { TrustMarquee } from "@/components/trust/TrustMarquee";
+import { Services } from "@/components/services/Services";
 import { Section } from "@/components/ui/Section";
 
 export default function Home() {
@@ -10,8 +12,8 @@ export default function Home() {
       <Navbar />
       <main id="main" tabIndex={-1} className="outline-none">
         <Hero />
-        <Section id="trust" label="Trust" className="!py-10" />
-        <Section id="services" label="Services" {...site.servicesCopy} />
+        <TrustMarquee />
+        <Services />
         <Section id="about" label="About" eyebrow={site.about.eyebrow} heading={site.about.heading} />
         <Section id="work" label="Work" {...site.workCopy} />
         <Section id="results" label="Results" {...site.resultsCopy} />

@@ -124,6 +124,9 @@ export function Hero() {
             pin: true,
             scrub: 1,
             invalidateOnRefresh: true,
+            // Created after hydration (needs the WebGL check), so refresh it first:
+            // triggers further down must be measured with its pin spacing in place.
+            refreshPriority: 1,
           },
           // Read the *scrubbed* progress so the 3D eases exactly like the DOM.
           onUpdate: () => {

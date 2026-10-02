@@ -275,3 +275,121 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* ------------------------------------------------------------------
+   Trust marquee — two identical tracks, each translating -100%.
+   ------------------------------------------------------------------ */
+@layer components {
+  .marquee {
+    display: flex;
+    overflow: hidden;
+    mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  }
+  .marquee-track {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 56px;
+    padding-right: 56px;
+    animation: marquee 40s linear infinite;
+  }
+  .marquee:hover .marquee-track,
+  .marquee:focus-within .marquee-track,
+  .marquee.is-paused .marquee-track {
+    animation-play-state: paused;
+  }
+  @keyframes marquee {
+    to {
+      transform: translateX(-100%);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    /* `animation: none` (not the global 0.01ms rule, which would leave the track at -100%) */
+    .marquee-track {
+      animation: none;
+      flex-wrap: wrap;
+      justify-content: center;
+      row-gap: 20px;
+      padding-right: 0;
+      flex-shrink: 1;
+    }
+    .marquee {
+      mask-image: none;
+      justify-content: center;
+      padding-inline: 20px;
+    }
+    .marquee-track[aria-hidden="true"],
+    .marquee-toggle {
+      display: none;
+    }
+  }
+}
+
+/* ------------------------------------------------------------------
+   Services ring (CSS 3D). Angle is written to .ring-3d by JS;
+   each item gets --facing (cos of its angle to the viewer, -1…1).
+   ------------------------------------------------------------------ */
+@layer components {
+  .ring-stage {
+    --card-w: 200px;
+    --card-h: 260px;
+    --r: clamp(280px, 32vw, 460px);
+    /* Room for the front card: perspective magnifies it (up to ~1.5× at r=460px)
+       and the -10° tilt pushes it down by r·sin10°. */
+    height: calc(var(--card-h) * 1.9);
+    perspective: 1400px;
+    touch-action: pan-y;
+    cursor: grab;
+  }
+  .ring-stage:active {
+    cursor: grabbing;
+  }
+  @media (min-width: 1024px) {
+    .ring-stage {
+      --card-w: 240px;
+      --card-h: 300px;
+    }
+  }
+  .ring-3d {
+    position: absolute;
+    left: 50%;
+    top: 44%;
+    width: 0;
+    height: 0;
+    transform-style: preserve-3d;
+    transform: rotateX(-10deg);
+  }
+  .ring-item {
+    position: absolute;
+    width: var(--card-w);
+    height: var(--card-h);
+    left: calc(var(--card-w) / -2);
+    top: calc(var(--card-h) / -2);
+    transform: rotateY(calc(var(--i) * var(--step))) translateZ(var(--r));
+    /* Culling lives on the transformed item itself: the opacity below is a
+       grouping property that flattens preserve-3d, so backface-visibility on a
+       child would be judged against the flat plane and show mirrored text. */
+    backface-visibility: hidden;
+    /* Side cards fade with their angle. */
+    opacity: clamp(0.2, calc(var(--facing, 1) * 1.25 - 0.1), 1);
+  }
+  .ring-card {
+    background-color: color-mix(in srgb, var(--color-bg-elevated) 92%, transparent);
+    transition:
+      opacity 0.3s ease,
+      transform 0.3s ease,
+      box-shadow 0.3s ease;
+  }
+  .service-card.is-front::before {
+    opacity: 1;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .ring-stage:hover .ring-item:not(:hover) .ring-card {
+      opacity: 0.45;
+    }
+    .ring-item:hover .ring-card {
+      transform: scale(1.08);
+      box-shadow: var(--shadow-glow);
+    }
+  }
+}
