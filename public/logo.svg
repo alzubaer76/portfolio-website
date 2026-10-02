@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <radialGradient id="orb" cx="35%" cy="35%" r="70%"><stop offset="0" stop-color="#B455F0"/><stop offset="1" stop-color="#5E0094"/></radialGradient>
+    
+  </defs>
+  
+  <g ><path d="M 416.10 121.66 A 209 209 0 1 0 416.10 390.34" stroke="#D900FD" stroke-width="18.4" stroke-linecap="round" fill="none"/><path d="M 397.91 136.92 A 185.25 185.25 0 1 0 397.91 375.08" stroke="#C900F2" stroke-width="17.25" stroke-linecap="round" fill="none"/><path d="M 381.17 150.97 A 163.4 163.4 0 1 0 381.17 361.03" stroke="#BB00E5" stroke-width="16.099999999999998" stroke-linecap="round" fill="none"/><path d="M 365.16 164.40 A 142.5 142.5 0 1 0 365.16 347.60" stroke="#9E00C9" stroke-width="14.374999999999998" stroke-linecap="round" fill="none"/><path d="M 350.61 176.62 A 123.5 123.5 0 1 0 350.61 335.38" stroke="#8A00BC" stroke-width="12.649999999999999" stroke-linecap="round" fill="none"/><path d="M 337.51 187.61 A 106.39999999999999 106.39999999999999 0 1 0 337.51 324.39" stroke="#7A00AE" stroke-width="11.5" stroke-linecap="round" fill="none"/><path d="M 325.86 197.38 A 91.19999999999999 91.19999999999999 0 1 0 325.86 314.62" stroke="#5E0094" stroke-width="10.35" stroke-linecap="round" fill="none"/><circle cx="248.476" cy="268.54" r="34" fill="url(#orb)"/></g>
+</svg>
