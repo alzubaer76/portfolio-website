@@ -52,6 +52,16 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${outfit.variable} ${jakarta.variable}`}>
+      <head>
+        {/* Font families also set on :root directly, so they survive even if the
+            <html> element's classes are lost (e.g. when embedded by another host). */}
+        <style
+          // innerHTML, not a text child: the quoted family names must not be re-escaped (hydration mismatch).
+          dangerouslySetInnerHTML={{
+            __html: `:root{--font-outfit:${outfit.style.fontFamily};--font-jakarta:${jakarta.style.fontFamily}}`,
+          }}
+        />
+      </head>
       <body className="antialiased">
         <a href="#main" className="skip-link">
           Skip to content

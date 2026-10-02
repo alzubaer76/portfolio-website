@@ -26,3 +26,7 @@ All copy and data lives in **`src/content/site.ts`**. Every value marked `// TOD
 - The hero scene only runs on **hardware-accelerated WebGL2**. Reduced motion, no WebGL, or a software renderer (SwiftShader/llvmpipe — e.g. GPU-less machines and PageSpeed's test servers) get a static inline-SVG ring stack instead.
 - Add **`?3d=1`** to the URL to force the 3D scene on a machine without a GPU (for testing only).
 - `three` is pinned to `~0.182.0`: from r183 Three logs a `THREE.Clock` deprecation warning that React Three Fiber 9 still triggers internally. Lift the pin once R3F moves to `THREE.Timer`.
+
+## Review build (static, no server)
+
+`npm run preview` builds a static copy into `/preview` with every path made relative, so it can be hosted under any URL (used for the claude.ai review link). The production build (`npm run build`) is unaffected.
